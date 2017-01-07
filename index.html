@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create building</title>
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.css" rel="stylesheet">
+
+<body>
+<div class="wrap">
+    <div class="container">
+        <h1>Create building</h1>
+
+
+        <!--<button onclick="building.createFloorPathNodesv3();">save</button>-->
+        <div class="row" id='wraper'>
+            <div class="col-md-3">
+                <div class="floors-control card card-block">
+                    <button id="btn-new-floor">New-floor</button>
+                    <select name="floors-list">
+
+                    </select></div>
+                <div class="card card-block" id="command-panel">
+                    <button type="button" id="add-products" data-toggle="modal"
+                            data-target="#stack-product-choice-form">Добавить товар
+                    </button>
+                    <button id="delete">Удалить</button>
+                    <button id="change">Изменить</button>
+                </div>
+                <div class="card card-block">
+                    <div><label class="d-block"><input type="radio" name="brushes" value="nothing" checked><span
+                            class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span></label>
+                        <label class="d-block"><input type="radio" name="brushes" value="wall">стена</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="window">окно</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="door">дверь</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="beacon">маяк</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="reader">считыватель</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="stack">витрина</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="stair">лестница</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="elevator">лифт</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="travolator">траволатор</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="room-select">выделить помещение</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="compass">указать север</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="guide-line-horizontal">линия -</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="guide-line-vertical">линия
+                            |</label>
+                        <label class="d-block"><input type="radio" name="brushes" value="ruler">линейка</label></div>
+                </div>
+            </div>
+            <div class="col-md-9" id="canvas-wraper">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+
+
+        <div id="stack-product-choice-form" class="fade modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2>Добавить товар на витрину</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div>
+                                    <div id="w0"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" name="search-product"
+                                       placeholder="Поиск товара" autocomplete="off">
+                                <div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='1'>ds</label></div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='39'>ор</label></div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='40'>fsdfsdf</label></div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='43'>Новый и18н</label></div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='44'>das</label></div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='45'>das</label></div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='46'>das</label></div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='47'>das</label></div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='48'>авыаыв</label></div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='49'>4аыв</label></div>
+                                    <div><label style='display: none'><input type='checkbox' name='product-list[]'
+                                                                             value='50'>последний товар</label></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="pull-right">
+                                    <button type="button" class="btn btn-success"
+                                            onClick="$(&#039;#stack-product-choice-form&#039;).modal(&#039;hide&#039;);">
+                                        OK
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="floor-choice-form" class="fade modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2>Выберите этажи</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div id="floor-choice-wrap"></div>
+                        <button type="button" id="floor-choice-submit" class="btn btn-success">ОК</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="beacon-create-modal" class="fade modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2>Параметры маячка</h2>
+                    </div>
+                    <div class="modal-body">
+                        <form id="beacon-create-form" action="/advanced/frontend/web/dictionary/place/create"
+                              method="post">
+                            <input type="hidden" name="_csrf"
+                                   value="aXFZZC1DeUs4FzAcACE4DjMVFyhgORN4PiQ6BVsRPT8.PmwUfDADBw==">
+                            <div class="form-group field-beaconcreateform-height required">
+                                <label class="control-label" for="beaconcreateform-height">Height</label>
+                                <input type="text" id="beaconcreateform-height" class="form-control"
+                                       name="BeaconCreateForm[height]">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group field-beaconcreateform-name required">
+                                <label class="control-label" for="beaconcreateform-name">Name</label>
+                                <input type="text" id="beaconcreateform-name" class="form-control"
+                                       name="BeaconCreateForm[name]">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group field-beaconcreateform-uuid required">
+                                <label class="control-label" for="beaconcreateform-uuid">Uuid</label>
+                                <input type="text" id="beaconcreateform-uuid" class="form-control"
+                                       name="BeaconCreateForm[uuid]" data-plugin-inputmask="inputmask_6be0fcae">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group field-beaconcreateform-major required">
+                                <label class="control-label" for="beaconcreateform-major">Major</label>
+                                <input type="text" id="beaconcreateform-major" class="form-control"
+                                       name="BeaconCreateForm[major]">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group field-beaconcreateform-minor required">
+                                <label class="control-label" for="beaconcreateform-minor">Minor</label>
+                                <input type="text" id="beaconcreateform-minor" class="form-control"
+                                       name="BeaconCreateForm[minor]">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group field-beaconcreateform-password">
+                                <label class="control-label" for="beaconcreateform-password">Password</label>
+                                <input type="text" id="beaconcreateform-password" class="form-control"
+                                       name="BeaconCreateForm[password]">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <button type="submit" id="" class="btn btn-success">ОК</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="reader-create-modal" class="fade modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2>Параметры считывателя</h2>
+                    </div>
+                    <div class="modal-body">
+                        <form id="reader-create-form" action="/advanced/frontend/web/dictionary/place/create"
+                              method="post">
+                            <input type="hidden" name="_csrf"
+                                   value="aXFZZC1DeUs4FzAcACE4DjMVFyhgORN4PiQ6BVsRPT8.PmwUfDADBw==">
+                            <div class="form-group field-readercreateform-height required">
+                                <label class="control-label" for="readercreateform-height">Height</label>
+                                <input type="text" id="readercreateform-height" class="form-control"
+                                       name="ReaderCreateForm[height]">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group field-readercreateform-mac required">
+                                <label class="control-label" for="readercreateform-mac">Mac</label>
+                                <input type="text" id="readercreateform-mac" class="form-control"
+                                       name="ReaderCreateForm[mac]" data-plugin-inputmask="inputmask_4640fb25">
+
+                                <div class="help-block"></div>
+                            </div>
+                            <button type="submit" id="" class="btn btn-success">ОК</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <hr>
+
+
+        <div id="address-map-modal" class="fade modal" role="dialog" tabindex="-1">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2>Местоположение</h2>
+                    </div>
+                    <div class="modal-body">
+
+
+                        <div id="w2" style="min-height: 600px; height: 200px;"></div>
+                        <button class="add-address-from-map btn btn-success">Добавить</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="pull-left">&copy; TeleRoamer 2017</p>
+        <p class="pull-right">IT Project</p>
+    </div>
+</footer>
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/fabric.js"></script>
+<script src="assets/js/geometry.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/building_schema.js"></script>
+<script src="assets/js/controls.js"></script>
+<script src="assets/js/bootstrap.js"></script>
+<script type="text/javascript">
+    (function () {
+        'use strict';
+
+        var canvas = new fabric.CanvasEx('canvas', {
+            scale: 2,
+            renderOnAddRemove: true
+        });
+
+        window.addEventListener('resize', resizeCanvas, false);
+
+        function resizeCanvas() {
+            canvas.setWidth($('#canvas-wraper').width());
+            canvas.renderAll();
+        }
+
+        // resize on init
+        canvas.setHeight('700');
+        resizeCanvas();
+
+        building.init(canvas, controlsManager);
+
+        building.loadStackData([]);
+
+        animationManager.start(canvas);
+    })();
+    (function () {
+        building.load('');
+    })();</script>
+<script type="text/javascript">jQuery(document).ready(function () {
+    jQuery('#w0').treeview({
+        "onNodeSelected": function (undefined, item) {
+            if (!item.items) {
+                return null;
+            }
+
+            $('input[type="checkbox"]').each(function (i, el) {
+                if (item.items.indexOf(parseInt($(el).val())) !== -1) {
+                    $(el).parent().show();
+                } else {
+                    $(el).parent().hide();
+                }
+            });
+        },
+        "selectedBackColor": "rgb(40, 153, 57)",
+        "borderColor": "#fff",
+        "data": [
+            {
+                "text": "кат 1",
+                "nodes": [
+                    {
+                        "text": "кат 1 1",
+                        "nodes": [
+                            {
+                                "text": "кат 1 1 2",
+                                "items": [1, 40, 43, 48],
+                                "icon": "none"
+                            }, {
+                                "text": "кат 1 1 1",
+                                "items": [39, 44, 45, 46, 47, 49, 50],
+                                "icon": "none"
+                            }, {
+                                "text": "кат 1 1 4",
+                                "items": [39],
+                                "icon": "none"
+                            }
+                        ],
+                        "items": [1, 40, 43, 48, 39, 44, 45, 46, 47, 49, 50, 39],
+                        "icon": "none"
+                    }
+                ],
+                "items": [1, 40, 43, 48, 39, 44, 45, 46, 47, 49, 50, 39],
+                "icon": "none"
+            }
+        ]
+    });
+    jQuery('#stack-product-choice-form').modal({"show": false});
+    jQuery('#floor-choice-form').modal({"show": false});
+    var inputmask_6be0fcae = {
+        "removeMaskOnSubmit": true,
+        "mask": "h{8}-h{4}-h{4}-h{4}-h{12}"
+    };
+    Inputmask.extendDefinitions({
+        "h": {
+            "validator": "[0-9a-fA-F]",
+            "cardinality": 1,
+            "prevalidator": null
+        }
+    });
+    jQuery("#beaconcreateform-uuid").inputmask(inputmask_6be0fcae);
+    jQuery('#beacon-create-form').yiiActiveForm([
+        {
+            "id": "beaconcreateform-height",
+            "name": "height",
+            "container": ".field-beaconcreateform-height",
+            "input": "#beaconcreateform-height",
+            "validate": function (attribute, value, messages, deferred, $form) {
+                yii.validation.required(value, messages, {"message": "Необходимо заполнить «Height»."});
+                yii.validation.number(value, messages, {
+                    "pattern": /^\s*[+-]?\d+\s*$/,
+                    "message": "Значение «Height» должно быть целым числом.",
+                    "min": 0,
+                    "tooSmall": "Значение «Height» должно быть не меньше 0.",
+                    "max": 65535,
+                    "tooBig": "Значение «Height» не должно превышать 65535.",
+                    "skipOnEmpty": 1
+                });
+            }
+        }, {
+            "id": "beaconcreateform-name",
+            "name": "name",
+            "container": ".field-beaconcreateform-name",
+            "input": "#beaconcreateform-name",
+            "validate": function (attribute, value, messages, deferred, $form) {
+                yii.validation.required(value, messages, {"message": "Необходимо заполнить «Name»."});
+                yii.validation.string(value, messages, {
+                    "message": "Значение «Name» должно быть строкой.",
+                    "max": 128,
+                    "tooLong": "Значение «Name» должно содержать максимум 128 символов.",
+                    "skipOnEmpty": 1
+                });
+                yii.validation.regularExpression(value, messages, {
+                    "pattern": /^[a-z]\w*$/i,
+                    "not": false,
+                    "message": "Значение «Name» неверно.",
+                    "skipOnEmpty": 1
+                });
+            }
+        }, {
+            "id": "beaconcreateform-uuid",
+            "name": "uuid",
+            "container": ".field-beaconcreateform-uuid",
+            "input": "#beaconcreateform-uuid",
+            "validate": function (attribute, value, messages, deferred, $form) {
+                yii.validation.required(value, messages, {"message": "Необходимо заполнить «Uuid»."});
+                yii.validation.string(value, messages, {
+                    "message": "Значение «Uuid» должно быть строкой.",
+                    "min": 32,
+                    "tooShort": "Значение «Uuid» должно содержать минимум 32 символа.",
+                    "max": 36,
+                    "tooLong": "Значение «Uuid» должно содержать максимум 36 символов.",
+                    "skipOnEmpty": 1
+                });
+            }
+        }, {
+            "id": "beaconcreateform-major",
+            "name": "major",
+            "container": ".field-beaconcreateform-major",
+            "input": "#beaconcreateform-major",
+            "validate": function (attribute, value, messages, deferred, $form) {
+                yii.validation.required(value, messages, {"message": "Необходимо заполнить «Major»."});
+                yii.validation.number(value, messages, {
+                    "pattern": /^\s*[+-]?\d+\s*$/,
+                    "message": "Значение «Major» должно быть целым числом.",
+                    "min": 0,
+                    "tooSmall": "Значение «Major» должно быть не меньше 0.",
+                    "max": 65535,
+                    "tooBig": "Значение «Major» не должно превышать 65535.",
+                    "skipOnEmpty": 1
+                });
+            }
+        }, {
+            "id": "beaconcreateform-minor",
+            "name": "minor",
+            "container": ".field-beaconcreateform-minor",
+            "input": "#beaconcreateform-minor",
+            "validate": function (attribute, value, messages, deferred, $form) {
+                yii.validation.required(value, messages, {"message": "Необходимо заполнить «Minor»."});
+                yii.validation.number(value, messages, {
+                    "pattern": /^\s*[+-]?\d+\s*$/,
+                    "message": "Значение «Minor» должно быть целым числом.",
+                    "min": 0,
+                    "tooSmall": "Значение «Minor» должно быть не меньше 0.",
+                    "max": 65535,
+                    "tooBig": "Значение «Minor» не должно превышать 65535.",
+                    "skipOnEmpty": 1
+                });
+            }
+        }, {
+            "id": "beaconcreateform-password",
+            "name": "password",
+            "container": ".field-beaconcreateform-password",
+            "input": "#beaconcreateform-password",
+            "validate": function (attribute, value, messages, deferred, $form) {
+                yii.validation.string(value, messages, {
+                    "message": "Значение «Password» должно быть строкой.",
+                    "max": 128,
+                    "tooLong": "Значение «Password» должно содержать максимум 128 символов.",
+                    "skipOnEmpty": 1
+                });
+            }
+        }
+    ], []);
+    jQuery('#beacon-create-modal').modal({"show": false});
+    var inputmask_4640fb25 = {
+        "removeMaskOnSubmit": true,
+        "mask": "h{2}-h{2}-h{2}-h{2}-h{2}-h{2}"
+    };
+    Inputmask.extendDefinitions({
+        "h": {
+            "validator": "[0-9a-fA-F]",
+            "cardinality": 1,
+            "prevalidator": null
+        }
+    });
+    jQuery("#readercreateform-mac").inputmask(inputmask_4640fb25);
+    jQuery('#reader-create-form').yiiActiveForm([
+        {
+            "id": "readercreateform-height",
+            "name": "height",
+            "container": ".field-readercreateform-height",
+            "input": "#readercreateform-height",
+            "validate": function (attribute, value, messages, deferred, $form) {
+                yii.validation.required(value, messages, {"message": "Необходимо заполнить «Height»."});
+                yii.validation.number(value, messages, {
+                    "pattern": /^\s*[+-]?\d+\s*$/,
+                    "message": "Значение «Height» должно быть целым числом.",
+                    "min": 0,
+                    "tooSmall": "Значение «Height» должно быть не меньше 0.",
+                    "max": 65535,
+                    "tooBig": "Значение «Height» не должно превышать 65535.",
+                    "skipOnEmpty": 1
+                });
+            }
+        }, {
+            "id": "readercreateform-mac",
+            "name": "mac",
+            "container": ".field-readercreateform-mac",
+            "input": "#readercreateform-mac",
+            "validate": function (attribute, value, messages, deferred, $form) {
+                yii.validation.required(value, messages, {"message": "Необходимо заполнить «Mac»."});
+                yii.validation.string(value, messages, {
+                    "message": "Значение «Mac» должно быть строкой.",
+                    "min": 12,
+                    "tooShort": "Значение «Mac» должно содержать минимум 12 символов.",
+                    "max": 17,
+                    "tooLong": "Значение «Mac» должно содержать максимум 17 символов.",
+                    "skipOnEmpty": 1
+                });
+                yii.validation.regularExpression(value, messages, {
+                    "pattern": /^[a-f\w\-]*$/i,
+                    "not": false,
+                    "message": "Значение «Mac» неверно.",
+                    "skipOnEmpty": 1
+                });
+            }
+        }
+    ], []);
+    jQuery('#reader-create-modal').modal({"show": false});
+    jQuery('#w1').yiiGridView({
+        "filterUrl": "\/advanced\/frontend\/web\/dictionary\/place\/create",
+        "filterSelector": "#w1-filters input, #w1-filters select"
+    });
+    
+    jQuery('#address-map-modal').modal({"show": false});
+});</script>
+</body>
+</html>
